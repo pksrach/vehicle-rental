@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Manage Backend Routes
+// Need to use middleware auth to protect the routes
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
+
 });
