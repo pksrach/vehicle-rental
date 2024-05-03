@@ -1,4 +1,5 @@
 @include('backend.layouts.header')
+@include('backend.layouts.sidebarmenu')
 
 <main id="main" class="main">
     @yield('content')
