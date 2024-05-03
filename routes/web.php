@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Support\Facades\Route;
-
+use  App\Http\Controllers\frontend\HomeController;  
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,13 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('frontend.home.index');
+// });
 
 // Manage Backend Routes
 // Need to use middleware auth to protect the routes
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
-
 });
+
+
+
+    
+// Manage Frontend Routes
+// Need to use middleware auth to protect the routes
+ Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
