@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\VehicleController;
+use App\Http\Controllers\frontend\AboutController;
 use Illuminate\Support\Facades\Route;
 use  App\Http\Controllers\frontend\HomeController;  
 /*
@@ -25,8 +26,6 @@ use  App\Http\Controllers\frontend\HomeController;
 // Need to use middleware auth to protect the routes
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
-<<<<<<< HEAD
-=======
 
     Route::group(['prefix' => 'vehicle-management'], function () {
         // Vehicle
@@ -45,7 +44,6 @@ Route::group(['prefix' => 'admin'], function () {
         });
     });
 
->>>>>>> 91d1556f3644ec687740e7faa1f532484c11f63b
 });
 
 
@@ -53,4 +51,7 @@ Route::group(['prefix' => 'admin'], function () {
     
 // Manage Frontend Routes
 // Need to use middleware auth to protect the routes
- Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
+Route::group(['prefix' => 'ui'], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
+    Route::get('/about', [AboutController::class, 'index'])->name('frontend.about');
+});
