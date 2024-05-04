@@ -19,13 +19,13 @@ return new class extends Migration {
             $table->decimal('price', 10, 2)->default(0);
             $table->string('attachment')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('brand_id');
-            $table->unsignedBigInteger('location_id');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table->unsignedBigInteger('location_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-            $table->softDeletes();
+            $table->softDeletes()->nullable();
             $table->timestamps();
         });
     }

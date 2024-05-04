@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- set icon -->
+    <link rel="icon" href="{{ asset('logo.ico') }}" type="image/x-icon">
 
     <title>@yield('title')</title>
     <meta content="" name="description">
@@ -50,8 +52,8 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{route('backend.dashboard')}}" class="logo d-flex align-items-center">
-            <img src="{{asset('backend/assets/img/logo.png')}}" alt="">
-            <span class="d-none d-lg-block">NiceAdmin</span>
+            <img src="{{asset('logo.png')}}" alt="">
+            <span class="d-none d-lg-block">Ubud Rental</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->

@@ -14,9 +14,9 @@ return new class extends Migration {
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->softDeletes();
+            $table->softDeletes()->nullable();
             $table->timestamps();
         });
     }
