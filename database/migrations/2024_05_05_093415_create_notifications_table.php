@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->softDeletes()->nullable();
             $table->timestamps();
 
-            $table->foreign('staff_id')->references('id')->on('staffs')->onDelete('cascade');
+            $table->foreign('staff_id')->references('id')->on('staff')->onDelete('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }

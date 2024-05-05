@@ -16,13 +16,15 @@ return new class extends Migration {
             $table->id();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('email')->unique();
-            $table->string('password');
             $table->string('phone')->nullable();
             $table->string('card_identify')->nullable();
             $table->string('attachment')->nullable();
             $table->boolean('is_active')->default(1);
             $table->softDeletes()->nullable();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
