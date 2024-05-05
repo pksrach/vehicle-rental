@@ -23,6 +23,8 @@
 {{--<script src="{{asset('backend/assets/js/main.js')}}"></script>--}}
 <script src="{{asset('backend/assets/vendor/jquery-3.7.1.min.js')}}"></script>
 <script src="{{asset('backend/assets/vendor/DataTables/datatables.js')}}"></script>
+{{--  Import function validate input number  --}}
+<script src="{{ asset('func_utils/ValidateNumber.js') }}"></script>
 @yield('myScript')
 </body>
 
