@@ -39,22 +39,28 @@ class CategoryController extends Controller
         return view('backend.category.index');
     }
 
-    public function create(Request $req)
+    public function create(Request $req): \Illuminate\Http\JsonResponse
     {
         $req->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'attachment' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'required'
         ]);
 
-        $brand = new Category();
-        $brand->name = $req->name;
-        $brand->description = $req->description;
-        $brand->attachment = $req->attachment->getClientOriginalName();
-        $brand->save();
+        $category = new Category();
+        $category->name = $req->name;
+        $category->description = $req->description;
 
-        $req->attachment->move(public_path('uploads/thumbnail'), $req->attachment->getClientOriginalName());
+        if ($req->hasFile('attachment')) {
+            $category->attachment = $req->attachment->getClientOriginalName();
+            $req->attachment->move(public_path('uploads/thumbnail'), $req->attachment->getClientOriginalName());
+        }
 
-        return response()->json(['success' => 'Data is successfully added']);
+        try {
+            $category->save();
+            return response()->json(['success' => 'Data is successfully added']);
+        } catch (\Exception $e) {
+            // Return the error message as JSON
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+
     }
 }

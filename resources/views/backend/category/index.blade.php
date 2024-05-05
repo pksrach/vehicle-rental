@@ -4,6 +4,7 @@
     <link href="{{asset('backend/assets/vendor/DataTables/datatables.css')}}" rel="stylesheet">
 @endsection
 @section('content')
+    @include('components.alert')
     <div class="pagetitle">
         <h1>Category</h1>
         <nav>
@@ -117,8 +118,6 @@
                     $('#disabledAnimation').find('input[type="file"]').val('');
                     // Reset the image preview
                     $('#img1').attr('src', '');
-                    // Reset the 'Active' select to its default value
-                    $('#active').val('1');
                     // Reset the submit button text to 'Create'
                     submitButton.text('Create');
                     // Reset the modal title
@@ -145,6 +144,10 @@
                 success: function (response) {
                     $('#disabledAnimation').modal('hide');
                     $('#dataTableList').DataTable().ajax.reload();
+
+                    // Show the success message in the modal
+                    $('#successModal').find('.modal-body').text(response.success);
+                    $('#successModal').modal('show');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (jqXHR.status === 422) { // When status code is 422, it's a validation issue
@@ -157,6 +160,12 @@
                         });
                         $('#disabledAnimation').modal('show');
                     } else {
+                        // Hide the create modal
+                        $('#disabledAnimation').modal('hide');
+
+                        // Show the error message in the modal
+                        $('#errorModal').find('.modal-body').text(jqXHR.responseJSON.error);
+                        $('#errorModal').modal('show');
                         console.error(textStatus, errorThrown);
                     }
                 }

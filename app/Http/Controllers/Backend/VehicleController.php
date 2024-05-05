@@ -73,7 +73,7 @@ class VehicleController extends Controller
         return view('backend.vehicle.index', compact('brands', 'categories', 'locations'));
     }
 
-    public function create(Request $req)
+    public function create(Request $req): \Illuminate\Http\JsonResponse
     {
         // Check if Brand, category, and location == "" or null or empty just set it null
         $brand = $req->brand == "" ? null : $req->brand;
@@ -93,43 +93,41 @@ class VehicleController extends Controller
             'active.required' => 'Active is required',
         ]);
 
+        // Start add request into db
+        $vehicle = new Vehicle();
+        $vehicle->name = $req->name;
+        $vehicle->description = $req->description;
+        $vehicle->price = $req->price;
+        $vehicle->is_active = $req->active;
+        $vehicle->brand_id = $brand;
+        $vehicle->category_id = $category;
+        $vehicle->location_id = $location;
+
+        // Handle the file upload
+        if ($req->hasFile('attachment')) {
+            $file = $req->file('attachment');
+            $filename = \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $filename);
+
+            // Create a thumbnail version of the image
+            $img = Image::make(public_path('uploads/' . $filename));
+            $img->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save(public_path('uploads/thumbnail/' . $filename));
+
+            $vehicle->attachment = $filename;
+        }
+
         try {
-            // Start add request into db
-            $vehicle = new Vehicle();
-            $vehicle->name = $req->name;
-            $vehicle->description = $req->description;
-            $vehicle->price = $req->price;
-            $vehicle->is_active = $req->active;
-            $vehicle->brand_id = $brand;
-            $vehicle->category_id = $category;
-            $vehicle->location_id = $location;
-
-            // Handle the file upload
-            if ($req->hasFile('attachment')) {
-                $file = $req->file('attachment');
-                $filename = \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads'), $filename);
-
-                // Create a thumbnail version of the image
-                $img = Image::make(public_path('uploads/' . $filename));
-                $img->resize(300, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(public_path('uploads/thumbnail/' . $filename));
-
-                $vehicle->attachment = $filename;
-            }
-
             $vehicle->save();
-
             // Return a success response
-            return redirect()->back()->with('success', 'Vehicle saved successfully');
+            return response()->json(['success' => 'Data is successfully added']);
         } catch (Exception $e) {
             // Log the exception message
             Log::error($e->getMessage());
-
             // Return an error response
-            return redirect()->back()->with('error', 'Failed to save vehicle');
+            return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 }
