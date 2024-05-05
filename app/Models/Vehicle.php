@@ -18,4 +18,19 @@ class Vehicle extends SoftDeleteModel
         'brand_id',
         'location_id',
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo('App\Models\Location');
+    }
 }
