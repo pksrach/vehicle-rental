@@ -7,6 +7,11 @@ $isVehicleRoute = Request::is('admin/vehicle-management/vehicles', 'admin/vehicl
 $isBrandRoute = Request::is('admin/vehicle-management/brands', 'admin/vehicle-management/brands/*');
 $isCategoryRoute = Request::is('admin/vehicle-management/categories', 'admin/vehicle-management/categories/*');
 $isLocationRoute = Request::is('admin/vehicle-management/locations', 'admin/vehicle-management/locations/*');
+
+$isMainRouteBookedManagement = Request::is('admin/booking-management/*');
+$isBookingRoute = Request::is('admin/booking-management/bookings', 'admin/booking-management/bookings/*');
+$isPaymentMethodRoute = Request::is('admin/booking-management/payment-methods', 'admin/booking-management/payment-method/*');
+
 ?>
     <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
@@ -58,18 +63,22 @@ $isLocationRoute = Request::is('admin/vehicle-management/locations', 'admin/vehi
 
         <!-- Booking -->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ $isMainRouteBookedManagement ? '' : 'collapsed' }}" data-bs-target="#tables-nav2"
+               data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Booking Management</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav2" class="nav-content collapse " data-bs-parent="#sidebar-nav2">
+            <ul id="tables-nav2" class="nav-content collapse {{ $isMainRouteBookedManagement ? 'show' : '' }} "
+                data-bs-parent="#sidebar-nav2">
                 <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Booked</span>
+                    <a class="{{$isBookingRoute ? 'active' : ''}}"
+                       href="{{route('backend.bookings.index')}}">
+                        <i class="bi bi-circle"></i><span>Booking</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a class="{{$isPaymentMethodRoute ? 'active' : ''}}"
+                       href="{{route('backend.payment_methods.index')}}">
                         <i class="bi bi-circle"></i><span>Payment Method</span>
                     </a>
                 </li>
