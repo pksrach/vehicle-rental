@@ -1,11 +1,11 @@
 @extends('backend.layouts.master')
-@section('title', 'Vehicle Management')
+@section('title', 'Location Management')
 @section('custom-style')
     <link href="{{asset('backend/assets/vendor/DataTables/datatables.css')}}" rel="stylesheet">
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Vehicle</h1>
+        <h1>Location</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('backend.dashboard')}}">Home</a></li>
@@ -40,21 +40,15 @@
                         data-bs-target="#disabledAnimation">
                     Create
                 </button>
-                @include('backend.vehicle.modal')
+                @include('backend.location.modal')
                 <div class="card">
                     <div class="table-responsive">
                         <!-- Table with stripped rows -->
                         <table id="dataTableList" class="datatable table table-hover table-center mb-0">
                             <thead>
                             <tr>
-                                <th>Attachment</th>
                                 <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Brand</th>
-                                <th>Category</th>
-                                <th>Location</th>
-                                <th>Active</th>
+                                <th>Parent Location</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -73,23 +67,16 @@
 
 @section('myScript')
     <script>
-        console.log('Hello from myScript in vehicle')
-        validateNumberInput('price', true);
         $(document).ready(function () {
             $('#dataTableList').DataTable({
                 processing: true,
                 serverSide: true,
                 destroy: true,
-                ajax: "{{route('backend.vehicles.index')}}",
+                ajax: "{{route('backend.locations.index')}}",
                 columns: [
-                    {data: 'attachment', name: 'attachment'},
                     {data: 'name', name: 'name'},
-                    {data: 'description', name: 'description'},
-                    {data: 'price', name: 'price'},
-                    {data: 'brand', name: 'brand'},
-                    {data: 'category', name: 'category'},
-                    {data: 'location', name: 'location'},
-                    {data: 'is_active', name: 'is_active'},
+                    {data: 'parent_name', name: 'parent_name', visible: true}, // Display parent name
+                    // {data: 'parent_id', name: 'parent_id', visible: false}, // Hide parent id
                     {data: 'action', name: 'action', orderable: false}
                 ],
                 error: function (xhr, error, thrown) {
@@ -97,22 +84,6 @@
                 }
             });
         });
-    </script>
-
-    {{--Preview Image--}}
-    <script>
-        function previewImg(event) {
-            if (event.target.files && event.target.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function () {
-                    var output = document.getElementById('img1');
-                    output.src = reader.result;
-                };
-                reader.readAsDataURL(event.target.files[0]);
-            } else {
-                console.log('No files selected');
-            }
-        }
     </script>
 
     {{--Create--}}
@@ -125,12 +96,6 @@
                 if (submitButton.text() === 'Update') {
                     // Clear all inputs and selects in the modal
                     $('#disabledAnimation').find('input[type="text"], textarea, select').val('');
-                    // Clear file input
-                    $('#disabledAnimation').find('input[type="file"]').val('');
-                    // Reset the image preview
-                    $('#img1').attr('src', '');
-                    // Reset the 'Active' select to its default value
-                    $('#active').val('1');
                     // Reset the submit button text to 'Create'
                     submitButton.text('Create');
                     // Reset the modal title
@@ -183,28 +148,10 @@
                 var table = $('#dataTableList').DataTable();
                 var data = table.row($(this).parents('tr')).data(); // Get the data for the row
 
-                // Extract the image URL from the 'attachment' field
-                var imageUrl = $(data.attachment).attr('src');
-                // Check if the image URL is 'no_img'
-                if (imageUrl === 'no_img.jpg') {
-                    imageUrl = ''; // Set the image URL to an empty string
-                }
-
-                // Extract the checked status from the 'is_active' field
-                var isActive = $(data.is_active).prop('checked') ? '1' : '0';
-
                 // Populate the modal with the data
                 $('#id').val(data.id)
                 $('#name').val(data.name);
-                $('#description').val(data.description);
-                $('#price').val(data.price);
-                $('#brand').val(data.brand_id); // Set the value to the brand ID
-                $('#category').val(data.category_id); // Set the value to the category ID
-                $('#location').val(data.location_id); // Set the value to the location ID
-                // Set the value of the 'active' select element
-                $('#active').val(isActive);
-                // Set the image source
-                $('#img1').attr('src', imageUrl);
+                $('#parent_id').val(data.parent_id).trigger('change'); // Use the parent id here
 
                 // Change the modal title and submit button text
                 $('#modalTitle').text('Update Vehicle');
@@ -231,8 +178,12 @@
             var url, method;
             if (id) {
                 // If the form has a data-id attribute, update the vehicle
-                url = '/admin/vehicle-management/vehicles/update' + id;
+                url = '/vehicles/' + id;
                 method = 'PUT';
+            } else {
+                // Otherwise, create a new vehicle
+                url = '/vehicles';
+                method = 'POST';
             }
 
             $.ajax({

@@ -13,4 +13,9 @@ class Location extends SoftDeleteModel
         'description',
         'parent_id',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Location::class, 'parent_id');
+    }
 }
