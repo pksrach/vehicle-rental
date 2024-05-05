@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->decimal('service_price', 10, 2)->default(0);
             $table->integer('discount')->default(0);
 
-            $table->foreign('booked_id')->references('id')->on('booked')->onDelete('cascade');
+            $table->foreign('booked_id')->references('id')->on('bookeds')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
 
             $table->timestamps();

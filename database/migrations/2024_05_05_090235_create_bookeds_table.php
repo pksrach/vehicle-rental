@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('booked', function (Blueprint $table) {
+        Schema::create('bookeds', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount', 10, 2)->default(0);
             $table->dateTime('pickup_date')->nullable();
@@ -37,6 +37,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('booked');
+        Schema::dropIfExists('bookeds');
     }
 };
