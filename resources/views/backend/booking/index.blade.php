@@ -37,13 +37,10 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#disabledAnimation">
-                    Create
-                </button>
                 {{--@include('backend.booking.modal')--}}
                 <div class="card">
                     <div class="table-responsive">
+                        <input type="hidden" name="_method" value="PUT">
                         <!-- Table with stripped rows -->
                         <table id="dataTableList" class="datatable table table-hover table-center mb-0">
                             <thead>
@@ -56,7 +53,6 @@
                                 <th>Staff</th>
                                 <th>Payment Method</th>
                                 <th>Action</th>
-{{--                                <th>Details</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -75,11 +71,12 @@
 @section('myScript')
     <script>
         validateNumberInput('amount', true);
-        $(document).ready(function() {
+        $(document).ready(function () {
             var table = $('#dataTableList').DataTable({
                 processing: true,
                 serverSide: true,
                 destroy: true,
+                sort: false,
                 ajax: "{{route('backend.bookings.index')}}",
                 columns: [
                     {data: 'status', name: 'status'},
@@ -98,44 +95,79 @@
             });
 
             // Add event listener for opening and closing details
-            $('#dataTableList tbody').on('click', 'tr', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
+            $('#dataTableList tbody').on('click', 'tr', function (e) {
+                if (!$(e.target).hasClass('btn')) {
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
 
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    // Open this row
-                    row.child(row.data().booked_details).show();
-                    tr.addClass('shown');
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    } else {
+                        // Open this row
+                        row.child(row.data().booked_details).show();
+                        tr.addClass('shown');
+                    }
                 }
+            });
+
+            // Add click event handler for action buttons
+            $(document).on('click', '#dataTableList .action-button', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var id = $(this).data('id');
+                var url = $(this).data('url')
+
+                // Store the URL in a data attribute of the confirmation button
+                $('#confirmButton').data('url', url);
+
+                // Show the confirmation modal
+                $('#confirmModal').modal('show');
+            });
+            $('#confirmButton').on('click', function () {
+                var url = $(this).data('url');
+
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    data: {
+                        "_token": $("meta[name='csrf-token']").attr("content"),
+                        "_method": "PUT",
+                    },
+                    success: function (response) {
+                        $('#confirmModal').modal('hide');
+                        $('#dataTableList').DataTable().ajax.reload();
+
+                        // Show the success message in the modal
+                        $('#successModal').find('.modal-body').text(response.success);
+                        $('#successModal').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 422) { // When status code is 422, it's a validation issue
+                            console.log(jqXHR.responseJSON);
+                            // Display errors on each form field
+                            var errors = jqXHR.responseJSON.errors;
+                            $.each(errors, function (key, value) {
+                                $('#' + key).addClass('is-invalid');
+                                $('#' + key).after('<div class="invalid-feedback">' + value + '</div>');
+                            });
+                            $('#confirmModal').modal('hide');
+                            $('#disabledAnimation').modal('show');
+                        } else {
+                            // Hide the confirmation modal
+                            $('#confirmModal').modal('hide');
+
+                            // Show the error message in the modal
+                            $('#errorModal').find('.modal-body').text(jqXHR.responseJSON.error);
+                            $('#errorModal').modal('show');
+                            console.error(textStatus, errorThrown);
+                        }
+                    }
+                });
             });
         });
-
-        /*$(document).ready(function () {
-            $('#dataTableList').DataTable({
-                processing: true,
-                serverSide: true,
-                destroy: true,
-                ajax: "{{route('backend.bookings.index')}}",
-                columns: [
-                    {data: 'status', name: 'status'},
-                    {data: 'amount', name: 'amount'},
-                    {data: 'pickup_date', name: 'pickup_date'},
-                    {data: 'complete_date', name: 'complete_date'},
-                    {data: 'customer', name: 'customer'},
-                    {data: 'staff', name: 'staff'},
-                    {data: 'payment_method', name: 'payment_method'},
-                    {data: 'action', name: 'action', orderable: false},
-                    // {data: 'booked_details', name: 'booked_details', orderable: false},
-                ],
-                error: function (xhr, error, thrown) {
-                    alert('An error occurred: ' + error + '\n' + thrown);
-                }
-            });
-        });*/
     </script>
 
     {{--Preview Image--}}
@@ -198,7 +230,7 @@
                     $('#dataTableList').DataTable().ajax.reload();
 
                     // Show the success message in the modal
-                    $('#successModal').find('.modal-body').text(response.success);
+                    $('#successModal').find('.modal-body').text(response.message);
                     $('#successModal').modal('show');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

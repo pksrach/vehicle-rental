@@ -60,9 +60,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'bookings'], function () {
             Route::get('/', [BookingController::class, 'index'])->name('backend.bookings.index');
             Route::post('/create', [BookingController::class, 'create'])->name('backend.bookings.create');
-            Route::get('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
-            Route::get('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
-            Route::get('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
+            Route::put('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
+            Route::put('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
+            Route::put('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
         });
     });
 });

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booked;
-use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -15,8 +14,6 @@ class BookingController extends Controller
      */
     public function index(Request $req)
     {
-        $paymentMethods = PaymentMethod::all();
-
         if ($req->ajax()) {
             $dataTableList = Booked::with('booked_details')->orderBy('id', 'desc')->get();
 
@@ -56,10 +53,10 @@ class BookingController extends Controller
                     $button = '';
 
                     if ($row->status == 'pending') {
-                        $button .= '<a href="' . route('backend.bookings.in-progress', $row->id) . '" class="btn btn-primary btn-sm">In Progress</a>';
-                        $button .= '<a href="' . route('backend.bookings.cancel', $row->id) . '" class="btn btn-danger btn-sm">Cancel</a>';
+                        $button .= '<button data-url="' . route('backend.bookings.in-progress', $row->id) . '" data-action="In Progress" class="btn btn-primary btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">In Progress</button> ';
+                        $button .= '<button data-url="' . route('backend.bookings.cancel', $row->id) . '" data-action="Cancel" class="btn btn-danger btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">Cancel</button> ';
                     } elseif ($row->status == 'in progress') {
-                        $button .= '<a href="' . route('backend.bookings.complete', $row->id) . '" class="btn btn-success btn-sm">Complete</a>';
+                        $button .= '<button data-url="' . route('backend.bookings.complete', $row->id) . '" data-action="Complete" class="btn btn-success btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">Complete</button> ';
                     }
 
                     return $button;
@@ -92,9 +89,9 @@ class BookingController extends Controller
                             $output .= '<td>' . $vehicle->brand->name . '</td>';
                             $output .= '<td>' . $vehicle->category->name . '</td>';
                             $output .= '<td>' . $vehicle->location->name . '</td>';
-                            $output .= '<td>' . $detail->service_price . '</td>';
-                            $output .= '<td>' . $detail->discount . '</td>';
-                            $output .= '<td>' . $amountAfterDiscount . '</td>';
+                            $output .= '<td>' . '$' . $detail->service_price . '</td>';
+                            $output .= '<td>' . $detail->discount . '%' . '</td>';
+                            $output .= '<td>' . '$' . $amountAfterDiscount . '</td>';
                             $output .= '</tr>';
                         }
                         $output .= '</tbody>';
@@ -109,5 +106,80 @@ class BookingController extends Controller
         }
 
         return view('backend.booking.index');
+    }
+
+
+    public function inProgress($id): \Illuminate\Http\JsonResponse
+    {
+        // Fetch the booking with the given id
+        $booking = Booked::findOrFail($id);
+
+        // Check if the status is 'pending'
+        if ($booking->status !== 'pending') {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Booking status is not pending.'], 400);
+        }
+
+        // Update the status to 'in progress'
+        $booking->status = 'in progress';
+
+        try {
+            $booking->save();
+            // Redirect back with a success message
+            return response()->json(['success' => 'Booking status updated to in progress.'], 200);
+        } catch (\Exception $e) {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Failed to update booking status.'], 500);
+        }
+    }
+
+    // Complete booking
+    public function complete($id): \Illuminate\Http\JsonResponse
+    {
+        // Fetch the booking with the given id
+        $booking = Booked::findOrFail($id);
+
+        // Check if the status is 'pending'
+        if ($booking->status !== 'in progress') {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Booking status is not pending.'], 400);
+        }
+
+        // Update the status to 'in progress'
+        $booking->status = 'completed';
+
+        try {
+            $booking->save();
+            // Redirect back with a success message
+            return response()->json(['success' => 'Booking has completed'], 200);
+        } catch (\Exception $e) {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Failed to update booking status.'], 500);
+        }
+    }
+
+    // Cancel
+    public function cancel($id): \Illuminate\Http\JsonResponse
+    {
+        // Fetch the booking with the given id
+        $booking = Booked::findOrFail($id);
+
+        // Check if the status is 'pending'
+        if ($booking->status !== 'pending') {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Booking status is not pending.'], 400);
+        }
+
+        // Update the status to 'in progress'
+        $booking->status = 'cancelled';
+
+        try {
+            $booking->save();
+            // Redirect back with a success message
+            return response()->json(['success' => 'Booking has cancelled'], 200);
+        } catch (\Exception $e) {
+            // Redirect back with an error message
+            return response()->json(['error' => 'Failed to update booking status.'], 500);
+        }
     }
 }
