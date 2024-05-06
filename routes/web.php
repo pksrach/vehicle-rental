@@ -3,16 +3,18 @@
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\frontend\AboutController;
-use Illuminate\Support\Facades\Route;
-use  App\Http\Controllers\frontend\ServiceController;
-use  App\Http\Controllers\frontend\PricingController;
-use  App\Http\Controllers\frontend\CarController;
-use  App\Http\Controllers\frontend\ContactController;
-use  App\Http\Controllers\frontend\BlogController;
+use App\Http\Controllers\frontend\BlogController;
+use App\Http\Controllers\frontend\CarController;
+use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\PricingController;
+use App\Http\Controllers\frontend\ServiceController;
 use App\Http\Controllers\frontend\BookingController;
+use Illuminate\Support\Facades\Route;
+
 // Need to use middleware auth to protect the routes
 // Admin
 Route::group(['prefix' => 'admin'], function () {
@@ -28,16 +30,22 @@ Route::group(['prefix' => 'admin'], function () {
         // Brand
         Route::group(['prefix' => 'brands'], function () {
             Route::get('/', [BrandController::class, 'index'])->name('backend.brands.index');
+            Route::post('/create', [BrandController::class, 'create'])->name('backend.brands.create');
         });
 
         // Brand
         Route::group(['prefix' => 'categories'], function () {
             Route::get('/', [CategoryController::class, 'index'])->name('backend.categories.index');
+            Route::post('/create', [CategoryController::class, 'create'])->name('backend.categories.create');
+        });
+
+        // Location
+        Route::group(['prefix' => 'locations'], function () {
+            Route::get('/', [LocationController::class, 'index'])->name('backend.locations.index');
+            Route::post('/create', [LocationController::class, 'create'])->name('backend.locations.create');
         });
     });
 });
-
-
 
 
 // Manage Frontend Routes

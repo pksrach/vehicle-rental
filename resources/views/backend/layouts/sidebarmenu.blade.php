@@ -6,8 +6,9 @@ $isMainRouteVehicleManagement = Request::is('admin/vehicle-management/*');
 $isVehicleRoute = Request::is('admin/vehicle-management/vehicles', 'admin/vehicle-management/vehicles/*');
 $isBrandRoute = Request::is('admin/vehicle-management/brands', 'admin/vehicle-management/brands/*');
 $isCategoryRoute = Request::is('admin/vehicle-management/categories', 'admin/vehicle-management/categories/*');
+$isLocationRoute = Request::is('admin/vehicle-management/locations', 'admin/vehicle-management/locations/*');
 ?>
-        <!-- ======= Sidebar ======= -->
+    <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -27,7 +28,7 @@ $isCategoryRoute = Request::is('admin/vehicle-management/categories', 'admin/veh
             <a class="nav-link {{ $isMainRouteVehicleManagement ? '' : 'collapsed' }}" data-bs-target="#tables-nav"
                data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Vehicle Management</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tables-nav" class="nav-content collapse {{ $isMainRouteVehicleManagement ? 'show' : '' }} "
                 data-bs-parent="#sidebar-nav">
@@ -47,7 +48,7 @@ $isCategoryRoute = Request::is('admin/vehicle-management/categories', 'admin/veh
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a class="{{$isLocationRoute ? 'active' : ''}}" href="{{route('backend.locations.index')}}">
                         <i class="bi bi-circle"></i><span>Location</span>
                     </a>
                 </li>
