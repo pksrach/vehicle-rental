@@ -20,7 +20,7 @@ class BookedFactory extends Factory
             'amount' => $this->faker->randomFloat(2, 10, 1000),
             'pickup_date' => $this->faker->dateTimeBetween('now', '+1 month'),
             'complete_date' => $this->faker->dateTimeBetween('+1 month', '+2 month'),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'cancelled']),
+            'status' => $this->faker->randomElement(['pending', 'in progress', 'completed', 'cancelled']),
             'customer_id' => \App\Models\Customer::factory(),
             'staff_id' => \App\Models\Staff::factory(),
             'payment_method_id' => \App\Models\PaymentMethod::factory(),

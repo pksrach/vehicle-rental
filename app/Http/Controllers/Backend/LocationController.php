@@ -39,17 +39,22 @@ class LocationController extends Controller
         return view('backend.location.index', compact('locations'));
     }
 
-    public function create(Request $req)
+    public function create(Request $req): \Illuminate\Http\JsonResponse
     {
         $req->validate([
             'name' => 'required',
         ]);
 
-        $brand = new Location();
-        $brand->name = $req->name;
-        $brand->parent_id = $req->parent_id;
-        $brand->save();
+        $location = new Location();
+        $location->name = $req->name;
+        $location->parent_id = $req->parent_id;
 
-        return response()->json(['success' => 'Data is successfully added']);
+        try {
+            $location->save();
+            return response()->json(['success' => 'Data is successfully added']);
+        } catch (\Exception $e) {
+            // Return the error message as JSON
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

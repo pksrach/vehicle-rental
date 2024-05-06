@@ -39,22 +39,27 @@ class BrandController extends Controller
         return view('backend.brand.index');
     }
 
-    public function create(Request $req)
+    public function create(Request $req): \Illuminate\Http\JsonResponse
     {
         $req->validate([
             'name' => 'required',
-            'description' => 'required',
-            'attachment' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $brand = new Brand();
         $brand->name = $req->name;
         $brand->description = $req->description;
-        $brand->attachment = $req->attachment->getClientOriginalName();
-        $brand->save();
 
-        $req->attachment->move(public_path('uploads/thumbnail'), $req->attachment->getClientOriginalName());
+        if ($req->hasFile('attachment')) {
+            $brand->attachment = $req->attachment->getClientOriginalName();
+            $req->attachment->move(public_path('uploads/thumbnail'), $req->attachment->getClientOriginalName());
+        }
 
-        return response()->json(['success' => 'Data is successfully added']);
+        try {
+            $brand->save();
+            return response()->json(['success' => 'Data is successfully added']);
+        } catch (\Exception $e) {
+            // Return the error message as JSON
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

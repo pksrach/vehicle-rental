@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends SoftDeleteModel
 {
@@ -16,4 +15,9 @@ class PaymentMethod extends SoftDeleteModel
         'links',
         'is_active',
     ];
+
+    public function displayName()
+    {
+        return $this->payment_name . ' ' . $this->account_name . ' ' . $this->account_number;
+    }
 }

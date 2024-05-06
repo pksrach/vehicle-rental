@@ -1,12 +1,12 @@
 @extends('backend.layouts.master')
-@section('title', 'Vehicle Management')
+@section('title', 'Booking Management')
 @section('custom-style')
     <link href="{{asset('backend/assets/vendor/DataTables/datatables.css')}}" rel="stylesheet">
 @endsection
 @section('content')
     @include('components.alert')
     <div class="pagetitle">
-        <h1>Vehicle</h1>
+        <h1>Booking</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('backend.dashboard')}}">Home</a></li>
@@ -41,22 +41,22 @@
                         data-bs-target="#disabledAnimation">
                     Create
                 </button>
-                @include('backend.vehicle.modal')
+                {{--@include('backend.booking.modal')--}}
                 <div class="card">
                     <div class="table-responsive">
                         <!-- Table with stripped rows -->
                         <table id="dataTableList" class="datatable table table-hover table-center mb-0">
                             <thead>
                             <tr>
-                                <th>Attachment</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Brand</th>
-                                <th>Category</th>
-                                <th>Location</th>
-                                <th>Active</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Pickup Date</th>
+                                <th>Complete Date</th>
+                                <th>Customer</th>
+                                <th>Staff</th>
+                                <th>Payment Method</th>
                                 <th>Action</th>
+{{--                                <th>Details</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -74,30 +74,68 @@
 
 @section('myScript')
     <script>
-        console.log('Hello from myScript in vehicle')
-        validateNumberInput('price', true);
-        $(document).ready(function () {
-            $('#dataTableList').DataTable({
+        validateNumberInput('amount', true);
+        $(document).ready(function() {
+            var table = $('#dataTableList').DataTable({
                 processing: true,
                 serverSide: true,
                 destroy: true,
-                ajax: "{{route('backend.vehicles.index')}}",
+                ajax: "{{route('backend.bookings.index')}}",
                 columns: [
-                    {data: 'attachment', name: 'attachment'},
-                    {data: 'name', name: 'name'},
-                    {data: 'description', name: 'description'},
-                    {data: 'price', name: 'price'},
-                    {data: 'brand', name: 'brand'},
-                    {data: 'category', name: 'category'},
-                    {data: 'location', name: 'location'},
-                    {data: 'is_active', name: 'is_active'},
-                    {data: 'action', name: 'action', orderable: false}
+                    {data: 'status', name: 'status'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'pickup_date', name: 'pickup_date'},
+                    {data: 'complete_date', name: 'complete_date'},
+                    {data: 'customer', name: 'customer'},
+                    {data: 'staff', name: 'staff'},
+                    {data: 'payment_method', name: 'payment_method'},
+                    {data: 'action', name: 'action', orderable: false},
+                    {data: 'booked_details', name: 'booked_details', orderable: false, visible: false}, // Hide this column
                 ],
                 error: function (xhr, error, thrown) {
                     alert('An error occurred: ' + error + '\n' + thrown);
                 }
             });
+
+            // Add event listener for opening and closing details
+            $('#dataTableList tbody').on('click', 'tr', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    // Open this row
+                    row.child(row.data().booked_details).show();
+                    tr.addClass('shown');
+                }
+            });
         });
+
+        /*$(document).ready(function () {
+            $('#dataTableList').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                ajax: "{{route('backend.bookings.index')}}",
+                columns: [
+                    {data: 'status', name: 'status'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'pickup_date', name: 'pickup_date'},
+                    {data: 'complete_date', name: 'complete_date'},
+                    {data: 'customer', name: 'customer'},
+                    {data: 'staff', name: 'staff'},
+                    {data: 'payment_method', name: 'payment_method'},
+                    {data: 'action', name: 'action', orderable: false},
+                    // {data: 'booked_details', name: 'booked_details', orderable: false},
+                ],
+                error: function (xhr, error, thrown) {
+                    alert('An error occurred: ' + error + '\n' + thrown);
+                }
+            });
+        });*/
     </script>
 
     {{--Preview Image--}}
@@ -218,7 +256,7 @@
                 $('#img1').attr('src', imageUrl);
 
                 // Change the modal title and submit button text
-                $('#modalTitle').text('Update Vehicle');
+                $('#modalTitle').text('Update Booking');
                 $('#submitButton').text('Update');
 
                 // Show the modal
@@ -227,54 +265,6 @@
         });
     </script>
 
-    {{--Update--}}
-    {{--<script>
-        $('#disabledAnimation form').on('submit', function (e) {
-            e.preventDefault();
-
-            // Clear previous error messages
-            $('.is-invalid').removeClass('is-invalid');
-            $('.invalid-feedback').remove();
-
-            var formData = new FormData(this);
-            var id = $(this).data('id'); // Get the ID of the vehicle (if any)
-
-            var url, method;
-            if (id) {
-                // If the form has a data-id attribute, update the vehicle
-                url = '/admin/vehicle-management/vehicles/update' + id;
-                method = 'PUT';
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $('#disabledAnimation').modal('hide');
-                    $('#dataTableList').DataTable().ajax.reload();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.status === 422) { // When status code is 422, it's a validation issue
-                        console.log(jqXHR.responseJSON);
-                        // Display errors on each form field
-                        var errors = jqXHR.responseJSON.errors;
-                        $.each(errors, function (key, value) {
-                            $('#' + key).addClass('is-invalid');
-                            $('#' + key).after('<div class="invalid-feedback">' + value + '</div>');
-                        });
-                        $('#disabledAnimation').modal('show');
-                    } else {
-                        console.error(textStatus, errorThrown);
-                    }
-                }
-            });
-        });
-    </script>--}}
-
-    {{--Catch error message--}}
     <script>
         @if ($errors->any())
         $('#disabledAnimation').modal('show');

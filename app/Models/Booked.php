@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Booked extends SoftDeleteModel
+class Booked extends Model
 {
     use HasFactory;
 
@@ -18,6 +18,11 @@ class Booked extends SoftDeleteModel
         'staff_id',
         'payment_method_id',
     ];
+
+    public function booked_details()
+    {
+        return $this->hasMany(BookedDetail::class);
+    }
 
     public function customer()
     {

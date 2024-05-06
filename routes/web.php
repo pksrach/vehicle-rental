@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Backend\BookingController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\PaymentMethodController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\frontend\AboutController;
 use App\Http\Controllers\frontend\BlogController;
@@ -20,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
 
+    // Vehicle Management
     Route::group(['prefix' => 'vehicle-management'], function () {
         // Vehicle
         Route::group(['prefix' => 'vehicles'], function () {
@@ -43,6 +46,24 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'locations'], function () {
             Route::get('/', [LocationController::class, 'index'])->name('backend.locations.index');
             Route::post('/create', [LocationController::class, 'create'])->name('backend.locations.create');
+        });
+    });
+
+    // Booking Management
+    Route::group(['prefix' => 'booking-management'], function () {
+        // Payment Method
+        Route::group(['prefix' => 'payment-methods'], function () {
+            Route::get('/', [PaymentMethodController::class, 'index'])->name('backend.payment_methods.index');
+            Route::post('/create', [PaymentMethodController::class, 'create'])->name('backend.payment_methods.create');
+        });
+
+        // Booking
+        Route::group(['prefix' => 'bookings'], function () {
+            Route::get('/', [BookingController::class, 'index'])->name('backend.bookings.index');
+            Route::post('/create', [BookingController::class, 'create'])->name('backend.bookings.create');
+            Route::get('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
+            Route::get('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
+            Route::get('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
         });
     });
 });

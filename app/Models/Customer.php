@@ -22,4 +22,9 @@ class Customer extends SoftDeleteModel
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function displayName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }
