@@ -3,9 +3,12 @@
 use App\Http\Controllers\Backend\BookingController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\PaymentMethodController;
+use App\Http\Controllers\Backend\StaffController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\frontend\AboutController;
 use App\Http\Controllers\frontend\BlogController;
@@ -63,6 +66,24 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
             Route::put('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
             Route::put('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
+        });
+    });
+
+    // User Management
+    Route::group(['prefix' => 'user-management'], function () {
+        // Customer
+        Route::group(['prefix' => 'customers'], function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('backend.customers.index');
+        });
+
+        // Staff
+        Route::group(['prefix' => 'staffs'], function () {
+            Route::get('/', [StaffController::class, 'index'])->name('backend.staffs.index');
+        });
+
+        // User
+        Route::group(['prefix' => 'users'], function () {
+            Route::get('/', [UserController::class, 'index'])->name('backend.users.index');
         });
     });
 });

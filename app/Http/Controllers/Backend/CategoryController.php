@@ -20,7 +20,7 @@ class CategoryController extends Controller
                 ->addIndexColumn()
                 ->addColumn('attachment', function ($row) {
                     $url = asset($row->attachment ? '/uploads/thumbnail/' . $row->attachment : 'no_img.jpg');
-                    return '<img src="' . $url . '" border="0" width="40" class="img-rounded" align="center" />';
+                    return '<img src="' . $url . '" border="0" width="100" class="img-rounded" align="center" />';
                 })
                 ->addColumn('name', function ($row) {
                     return $row->name ? $row->name : 'N/A';
