@@ -16,6 +16,9 @@ $isMainRouteUserManagement = Request::is('admin/user-management/*');
 $isCustomerRoute = Request::is('admin/user-management/customers', 'admin/user-management/customers/*');
 $isStaffRoute = Request::is('admin/user-management/staffs', 'admin/user-management/staffs/*');
 $isUserRoute = Request::is('admin/user-management/users', 'admin/user-management/users/*');
+
+$isMainRouteReportManagement = Request::is('admin/report-management/*');
+$isSaleServiceRoute = Request::is('admin/report-management/sales-services', 'admin/report-management/sales-services/*');
 ?>
         <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
@@ -118,37 +121,16 @@ $isUserRoute = Request::is('admin/user-management/users', 'admin/user-management
         </li>
         <!-- End User Nav -->
 
-        <!-- Expense -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav4" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Expense Management</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="tables-nav4" class="nav-content collapse " data-bs-parent="#sidebar-nav4">
-                <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Expense</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Expense Type</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- End Expense Nav -->
-
         <!-- Report -->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav5" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed {{ $isMainRouteReportManagement ? '' : 'collapsed' }} " data-bs-target="#tables-nav5" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Report Management</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav5" class="nav-content collapse " data-bs-parent="#sidebar-nav5">
+            <ul id="tables-nav5" class="nav-content collapse {{ $isMainRouteReportManagement ? 'show' : '' }} " data-bs-parent="#sidebar-nav5">
                 <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Income</span>
+                    <a class="{{$isSaleServiceRoute ? 'active' : ''}}" href="{{route('backend.reports.sales-services')}}">
+                        <i class="bi bi-circle"></i><span>Sale Service</span>
                     </a>
                 </li>
             </ul>

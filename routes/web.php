@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\PaymentMethodController;
+use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\StaffController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VehicleController;
@@ -85,6 +86,12 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', [UserController::class, 'index'])->name('backend.users.index');
         });
+    });
+
+    // Report Management
+    Route::group(['prefix' => 'report-management'], function () {
+        Route::get('/sales-services', [ReportController::class, 'saleService'])->name('backend.reports.sales-services');
+        Route::get('/sales-services/export', [ReportController::class, 'saleServiceExport'])->name('sales-services.export');
     });
 });
 
