@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 // Admin
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
+    Route::get('/get-booking-counts', [DashboardController::class, 'getBookingCounts'])->name('backend.dashboard.get-booking-counts');
+    Route::get('/get-customer-counts', [DashboardController::class, 'getCustomerCounts'])->name('backend.dashboard.get-customer-counts');
+    Route::get('/get-report-data', [DashboardController::class, 'getReportData'])->name('backend.dashboard.get-report-data');
 
     // Vehicle Management
     Route::group(['prefix' => 'vehicle-management'], function () {

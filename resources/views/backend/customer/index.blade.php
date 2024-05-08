@@ -213,57 +213,6 @@
         });
     </script>
 
-    {{--Update--}}
-    {{--<script>
-        $('#disabledAnimation form').on('submit', function (e) {
-            e.preventDefault();
-
-            // Clear previous error messages
-            $('.is-invalid').removeClass('is-invalid');
-            $('.invalid-feedback').remove();
-
-            var formData = new FormData(this);
-            var id = $(this).data('id'); // Get the ID of the vehicle (if any)
-
-            var url, method;
-            if (id) {
-                // If the form has a data-id attribute, update the vehicle
-                url = '/vehicles/' + id;
-                method = 'PUT';
-            } else {
-                // Otherwise, create a new vehicle
-                url = '/vehicles';
-                method = 'POST';
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $('#disabledAnimation').modal('hide');
-                    $('#dataTableList').DataTable().ajax.reload();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.status === 422) { // When status code is 422, it's a validation issue
-                        console.log(jqXHR.responseJSON);
-                        // Display errors on each form field
-                        var errors = jqXHR.responseJSON.errors;
-                        $.each(errors, function (key, value) {
-                            $('#' + key).addClass('is-invalid');
-                            $('#' + key).after('<div class="invalid-feedback">' + value + '</div>');
-                        });
-                        $('#disabledAnimation').modal('show');
-                    } else {
-                        console.error(textStatus, errorThrown);
-                    }
-                }
-            });
-        });
-    </script>--}}
-
     {{--Catch error message--}}
     <script>
         @if ($errors->any())

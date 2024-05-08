@@ -1,12 +1,12 @@
 @extends('backend.layouts.master')
-@section('title', 'Customer Management')
+@section('title', 'User Management')
 @section('custom-style')
     <link href="{{asset('backend/assets/vendor/DataTables/datatables.css')}}" rel="stylesheet">
 @endsection
 @section('content')
     @include('components.alert')
     <div class="pagetitle">
-        <h1>Customer</h1>
+        <h1>User</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('backend.dashboard')}}">Home</a></li>
