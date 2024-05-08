@@ -18,7 +18,6 @@ use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PricingController;
 use App\Http\Controllers\frontend\ServiceController;
-use App\Http\Controllers\frontend\BookingController;
 use Illuminate\Support\Facades\Route;
 
 // Need to use middleware auth to protect the routes
