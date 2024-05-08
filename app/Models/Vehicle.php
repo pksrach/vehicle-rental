@@ -33,4 +33,9 @@ class Vehicle extends SoftDeleteModel
     {
         return $this->belongsTo('App\Models\Location');
     }
+
+    public function display()
+    {
+        return $this->brand->name . ' ' . $this->name . ' ' . $this->category->name;
+    }
 }

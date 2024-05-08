@@ -47,10 +47,10 @@ class SaleServiceExport implements FromCollection, WithHeadings, WithStyles, Wit
                 'Payment Method' => $booked->paymentMethod->displayName(),
                 'Staff' => $booked->staff->displayName(),
                 'Details' => implode(', ', [
-                    'Vehicle' => $booked->booked_details->first()->vehicle->name,
-                    'Service' => '$' . number_format($booked->booked_details->first()->service_price, 2),
-                    'Discount' => $booked->booked_details->first()->discount . '%',
-                    'Amount After Discount' => '$' . number_format($amountAfterDiscount, 2),
+                    'Vehicle' => 'Vehicle: ' . $booked->booked_details->first()->vehicle->display(),
+                    'Service' => 'Service: $' . number_format($booked->booked_details->first()->service_price, 2),
+                    'Discount' => 'Discount: ' . $booked->booked_details->first()->discount . '%',
+                    'Amount Discount' => 'After Discount: $' . number_format($amountAfterDiscount, 2),
                 ]),
             ];
         });
@@ -64,7 +64,7 @@ class SaleServiceExport implements FromCollection, WithHeadings, WithStyles, Wit
             'Customer' => '',
             'Payment Method' => '',
             'Staff' => '',
-            'Details' => 'Total Amount After Discount: $' . number_format($totalSum, 2),
+            'Details' => 'Total After Discount: $' . number_format($totalSum, 2),
         ]);
 
         return $transformedData;
@@ -104,6 +104,10 @@ class SaleServiceExport implements FromCollection, WithHeadings, WithStyles, Wit
         // Set the value of the merged cell to your desired title
         $sheet->setCellValue('A1', 'Sales Service Report');
 
+        // Get the font of the cell A1 and set its size to 16
+        $sheet->getStyle('A1')->getFont()->setSize(16);
+
+
         // Apply bold style to the first row
         $sheet->getStyle('A1:H1')->applyFromArray($boldArray);
 
@@ -122,16 +126,14 @@ class SaleServiceExport implements FromCollection, WithHeadings, WithStyles, Wit
 
         // Apply all border style to the second row
         $styleArray = [
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
+            'font' => [
+                'bold' => true,
+                'size' => 12, // Set the font size to 16
             ],
         ];
-        $sheet->getStyle('A2:H2')->applyFromArray($styleArray);
 
-        // Apply bold style to the last row
+// Apply the style to the last row
         $lastRow = $sheet->getHighestRow();
-        $sheet->getStyle('A' . $lastRow . ':' . 'H' . $lastRow)->applyFromArray($boldArray);
+        $sheet->getStyle('A' . $lastRow . ':' . 'H' . $lastRow)->applyFromArray($styleArray);
     }
 }
