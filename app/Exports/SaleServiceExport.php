@@ -132,7 +132,7 @@ class SaleServiceExport implements FromCollection, WithHeadings, WithStyles, Wit
             ],
         ];
 
-// Apply the style to the last row
+        // Apply the style to the last row
         $lastRow = $sheet->getHighestRow();
         $sheet->getStyle('A' . $lastRow . ':' . 'H' . $lastRow)->applyFromArray($styleArray);
     }

@@ -91,7 +91,8 @@ Route::group(['prefix' => 'admin'], function () {
     // Report Management
     Route::group(['prefix' => 'report-management'], function () {
         Route::get('/sales-services', [ReportController::class, 'saleService'])->name('backend.reports.sales-services');
-        Route::get('/sales-services/export', [ReportController::class, 'saleServiceExport'])->name('sales-services.export');
+        Route::get('/sales-services/export/excel', [ReportController::class, 'saleServiceExportExcel'])->name('sales-services.export.excel');
+        Route::get('/sales-services/export/pdf', [ReportController::class, 'saleServiceExportPdf'])->name('sales-services.export.pdf');
     });
 });
 

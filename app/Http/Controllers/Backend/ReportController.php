@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Exports\SaleServiceExport;
 use App\Http\Controllers\Controller;
 use App\Models\Booked;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -102,8 +104,33 @@ class ReportController extends Controller
 
         return view('backend.report.sale_service');
     }
-    public function saleServiceExport(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+
+    public function saleServiceExportExcel(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         return Excel::download(new SaleServiceExport, 'sale_service.xlsx');
+    }
+
+    public function saleServiceExportPdf(): void
+    {
+        // Fetch the data
+        $bookedRecords = Booked::with('booked_details')->get();
+
+        // Load the view and pass the data
+        $html = view('backend.report.export.sale-service-pdf', compact('bookedRecords'));
+
+        // Instantiate Dompdf with our settings
+        $dompdf = new Dompdf();
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Set up the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream();
     }
 }

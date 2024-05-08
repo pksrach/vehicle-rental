@@ -18,6 +18,7 @@
         </div>
         <div>
             <button id="exportExcel" class="btn btn-primary">Export as Excel</button>
+            <button id="exportPdf" class="btn btn-primary">Export as PDF</button>
         </div>
     </div><!-- End Page Title -->
 
@@ -314,7 +315,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: '{{ route('sales-services.export') }}',
+                url: '{{ route('sales-services.export.excel') }}',
                 method: 'GET',
                 xhrFields: {
                     responseType: 'blob'
@@ -330,6 +331,11 @@
                     window.URL.revokeObjectURL(url);
                 }
             });
+        });
+
+        $('#exportPdf').on('click', function (e) {
+            e.preventDefault();
+            window.location.href = '{{ route('sales-services.export.pdf') }}';
         });
     </script>
 @endsection
