@@ -27,6 +27,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get-booking-counts', [DashboardController::class, 'getBookingCounts'])->name('backend.dashboard.get-booking-counts');
     Route::get('/get-customer-counts', [DashboardController::class, 'getCustomerCounts'])->name('backend.dashboard.get-customer-counts');
     Route::get('/get-report-data', [DashboardController::class, 'getReportData'])->name('backend.dashboard.get-report-data');
+    Route::get('/get-top-rent', [DashboardController::class, 'topVehicleRent'])->name('backend.dashboard.get-top-rent');
+    Route::get('/top-rent/export/pdf', [DashboardController::class, 'topVehicleRentExportPdf'])->name('top-rent.export.pdf');
 
     // Vehicle Management
     Route::group(['prefix' => 'vehicle-management'], function () {

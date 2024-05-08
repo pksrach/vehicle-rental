@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Booked;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
