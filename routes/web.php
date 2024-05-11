@@ -14,12 +14,14 @@ use App\Http\Controllers\Backend\StaffController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\frontend\AboutController;
+use App\Http\Controllers\frontend\AddToCardController;
 use App\Http\Controllers\frontend\BlogController;
 use App\Http\Controllers\frontend\CarController;
 use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PricingController;
 use App\Http\Controllers\frontend\ServiceController;
+use App\Http\Controllers\frontend\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 // Admin Routes
@@ -127,6 +129,9 @@ Route::middleware([AuthenticateBackendController::class])->group(function () {
 // Manage Frontend Routes
 // Need to use middleware auth to protect the routes
 Route::group(['prefix' => ''], function () {
+    //Auth
+    Route::get('/login', [LoginController::class, 'login'])->name('front.login');
+   
     // Home
     Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
     // About
@@ -142,5 +147,5 @@ Route::group(['prefix' => ''], function () {
     // Blog
     Route::get('/blog', [BlogController::class, 'index'])->name('frontend.blog');
     // Booking
-    Route::get('/booking', [BookingController::class, 'index'])->name('frontend.booking');
+    Route::get('/booking', [AddToCardController::class, 'index'])->name('frontend.booking');
 });
