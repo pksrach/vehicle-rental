@@ -284,7 +284,11 @@
                     success: function (data) {
                         $('#sales-count').text(data.count);
                         $('#sales-percentage').text(data.percentage + '%');
-                        var formattedSum = parseFloat(data.sum).toLocaleString('en-US', {
+                        var sum = parseFloat(data.sum);
+                        if (isNaN(sum)) {
+                            sum = 0;
+                        }
+                        var formattedSum = sum.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'USD'
                         });
