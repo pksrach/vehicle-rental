@@ -23,16 +23,7 @@
                                     <th>Location</th>
                                     <th>Action</th>
                                 </tr>
-                                <tr>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                    <td>Hello</td>
-                                </tr>
+                                 
 
                             </thead>
                             <tbody>
@@ -50,3 +41,4 @@
         </div>
     </section>
 @endsection
+    

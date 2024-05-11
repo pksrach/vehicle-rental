@@ -117,8 +117,7 @@
                             <div class="item">
                                 <div class="car-wrap rounded ftco-animate">
                                     <div class="img rounded d-flex align-items-end"
-                                        style="background-image: url(frontend/assets/images/car-1.jpg);"
-                                        >
+                                        style="background-image: url(frontend/assets/images/car-1.jpg);">
                                     </div>
                                     <div class="text">
                                         <h2 class="mb-0"><a href="#">{{ $item->name }}</a></h2>
@@ -126,10 +125,13 @@
                                             <span class="cat">{{ $item->description }}</span>
                                             <p class="price ml-auto">${{ $item->price }} <span>/day</span></p>
                                         </div>
-                                        <p class="d-flex mb-0 d-block"><a href="{{ route('frontend.booking') }}"
-                                                class="btn btn-primary py-2 mr-1" >Book now</a> <a
-                                                href="#"
-                                                class="btn btn-secondary py-2 ml-1">Details</a></p>
+                                        <form id="myForm">
+                                            <p class="d-flex mb-0 d-block">
+                                                <a type="submit" href="{{ route('frontend.booking') }}"
+                                                    class="btn btn-primary py-2 mr-1" id="btnBooking">Book now</a>
+                                                <a href="#" class="btn btn-secondary py-2 ml-1">Details</a>
+                                            </p>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -435,4 +437,35 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $("#btnBooking").click(function(e) {
+                var formData = $(this).closest("form")
+            .serialize(); // Get data from form containing the button
+                localStorage.setItem("formData", JSON.stringify(formData));
+
+                // Additional Logic (optional):
+                // - Send data to Laravel controller using AJAX
+                // - Perform validation or other actions before sending
+
+                // Example AJAX call (assuming a POST route):
+                $.ajax({
+                    url: "{{ route('frontend.booking') }}", // Replace with your actual route
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        console.log("Data sent successfully:", response);
+                        // Handle successful response (e.g., clear form, display confirmation)
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error sending data:", textStatus, errorThrown);
+                        // Handle errors (e.g., display error message)
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
