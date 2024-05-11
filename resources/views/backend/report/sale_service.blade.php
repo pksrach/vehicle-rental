@@ -1,19 +1,25 @@
 @extends('backend.layouts.master')
-@section('title', 'Booking Management')
+@section('title', 'Report Sale Service')
 @section('custom-style')
     <link href="{{asset('backend/assets/vendor/DataTables/datatables.css')}}" rel="stylesheet">
 @endsection
 @section('content')
     @include('components.alert')
-    <div class="pagetitle">
-        <h1>Booking</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('backend.dashboard')}}">Home</a></li>
-                <li class="breadcrumb-item">Tables</li>
-                <li class="breadcrumb-item active">Data</li>
-            </ol>
-        </nav>
+    <div class="pagetitle d-flex justify-content-between">
+        <div>
+            <h1>Booking</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{route('backend.dashboard')}}">Home</a></li>
+                    <li class="breadcrumb-item">Tables</li>
+                    <li class="breadcrumb-item active">Data</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <button id="exportExcel" class="btn btn-primary">Export as Excel</button>
+            <button id="exportPdf" class="btn btn-primary">Export as PDF</button>
+        </div>
     </div><!-- End Page Title -->
 
     <section class="section">
@@ -45,22 +51,14 @@
                         <table id="dataTableList" class="datatable table table-hover table-center mb-0">
                             <thead>
                             <tr>
-                                <th>
-                                    <select id="statusFilter" class="form-select form-select-sm">
-                                        <option value="">All</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="in progress">In Progress</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
-                                </th>
+                                <th>#</th>
+                                <th>Status</th>
                                 <th>Amount</th>
                                 <th>Pickup Date</th>
                                 <th>Complete Date</th>
                                 <th>Customer</th>
                                 <th>Staff</th>
                                 <th>Payment Method</th>
-                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -85,8 +83,9 @@
                 serverSide: true,
                 destroy: true,
                 sort: false,
-                ajax: "{{route('backend.bookings.index')}}",
+                ajax: "{{route('backend.reports.sales-services')}}",
                 columns: [
+                    {data: 'no', name: 'no'},
                     {data: 'status', name: 'status'},
                     {data: 'amount', name: 'amount'},
                     {data: 'pickup_date', name: 'pickup_date'},
@@ -94,7 +93,6 @@
                     {data: 'customer', name: 'customer'},
                     {data: 'staff', name: 'staff'},
                     {data: 'payment_method', name: 'payment_method'},
-                    {data: 'action', name: 'action', orderable: false},
                     {data: 'booked_details', name: 'booked_details', orderable: false, visible: false}, // Hide this column
                 ],
                 error: function (xhr, error, thrown) {
@@ -118,11 +116,6 @@
                         tr.addClass('shown');
                     }
                 }
-            });
-
-
-            $('#statusFilter').change(function () {
-                table.column(0).search($(this).val()).draw();
             });
 
             // Add click event handler for action buttons
@@ -314,5 +307,35 @@
         @if ($errors->any())
         $('#disabledAnimation').modal('show');
         @endif
+    </script>
+
+    {{--Export excel--}}
+    <script>
+        $('#exportExcel').on('click', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '{{ route('sales-services.export.excel') }}',
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = 'sale_service.xlsx';
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+        });
+
+        $('#exportPdf').on('click', function (e) {
+            e.preventDefault();
+            window.location.href = '{{ route('sales-services.export.pdf') }}';
+        });
     </script>
 @endsection

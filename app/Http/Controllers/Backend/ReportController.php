@@ -2,25 +2,34 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\SaleServiceExport;
 use App\Http\Controllers\Controller;
 use App\Models\Booked;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
-class BookingController extends Controller
+class ReportController extends Controller
 {
     /**
      * @throws \Exception
      */
-    public function index(Request $req)
+    public function saleService(Request $req)
     {
         if ($req->ajax()) {
-            $dataTableList = Booked::with('booked_details')->orderBy('id', 'desc')->get();
+            $dataTableList = Booked::with('booked_details')
+                ->whereIn('status', ['completed', 'cancelled'])
+                ->orderBy('id', 'desc')
+                ->get();
 
+            $i = 0;
             return DataTables::of($dataTableList)
                 ->addIndexColumn()
+                ->addColumn('no', function ($row) use (&$i) {
+                    return ++$i;
+                })
                 ->addColumn('status', function ($row) {
-
                     $statusClass = match ($row->status) {
                         'pending' => 'warning',
                         'in progress' => 'primary',
@@ -28,7 +37,6 @@ class BookingController extends Controller
                         'cancelled' => 'danger',
                         default => 'secondary',
                     };
-
                     return '<span class="badge rounded-pill bg-' . $statusClass . '">' . ucfirst($row->status) . '</span>';
                 })
                 ->addColumn('amount', function ($row) {
@@ -48,18 +56,6 @@ class BookingController extends Controller
                 })
                 ->addColumn('payment_method', function ($row) {
                     return $row->paymentMethod->displayName() ? $row->paymentMethod->displayName() : 'N/A';
-                })
-                ->addColumn('action', function ($row) {
-                    $button = '';
-
-                    if ($row->status == 'pending') {
-                        $button .= '<button data-url="' . route('backend.bookings.in-progress', $row->id) . '" data-action="In Progress" class="btn btn-primary btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">In Progress</button> ';
-                        $button .= '<button data-url="' . route('backend.bookings.cancel', $row->id) . '" data-action="Cancel" class="btn btn-danger btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">Cancel</button> ';
-                    } elseif ($row->status == 'in progress') {
-                        $button .= '<button data-url="' . route('backend.bookings.complete', $row->id) . '" data-action="Complete" class="btn btn-success btn-sm action-button" data-bs-toggle="modal" data-bs-target="#confirmModal">Complete</button> ';
-                    }
-
-                    return $button;
                 })
                 ->addColumn('booked_details', function ($row) {
                     $details = $row->booked_details;
@@ -101,85 +97,39 @@ class BookingController extends Controller
 
                     return $output;
                 })
-                ->rawColumns(['action', 'status', 'booked_details'])
+                ->rawColumns(['status', 'booked_details'])
                 ->make(true);
         }
 
-        return view('backend.booking.index');
+        return view('backend.report.sale_service');
     }
 
-
-    public function inProgress($id): \Illuminate\Http\JsonResponse
+    public function saleServiceExportExcel(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
-        // Fetch the booking with the given id
-        $booking = Booked::findOrFail($id);
-
-        // Check if the status is 'pending'
-        if ($booking->status !== 'pending') {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Booking status is not pending.'], 400);
-        }
-
-        // Update the status to 'in progress'
-        $booking->status = 'in progress';
-
-        try {
-            $booking->save();
-            // Redirect back with a success message
-            return response()->json(['success' => 'Booking status updated to in progress.'], 200);
-        } catch (\Exception $e) {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Failed to update booking status.'], 500);
-        }
+        return Excel::download(new SaleServiceExport, 'sale_service.xlsx');
     }
 
-    // Complete booking
-    public function complete($id): \Illuminate\Http\JsonResponse
+    public function saleServiceExportPdf(): void
     {
-        // Fetch the booking with the given id
-        $booking = Booked::findOrFail($id);
+        // Fetch the data
+        $bookedRecords = Booked::with('booked_details')->get();
 
-        // Check if the status is 'pending'
-        if ($booking->status !== 'in progress') {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Booking status is not pending.'], 400);
-        }
+        // Load the view and pass the data
+        $html = view('backend.report.export.sale-service-pdf', compact('bookedRecords'));
 
-        // Update the status to 'in progress'
-        $booking->status = 'completed';
+        // Instantiate Dompdf with our settings
+        $dompdf = new Dompdf();
 
-        try {
-            $booking->save();
-            // Redirect back with a success message
-            return response()->json(['success' => 'Booking has completed'], 200);
-        } catch (\Exception $e) {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Failed to update booking status.'], 500);
-        }
-    }
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
 
-    // Cancel
-    public function cancel($id): \Illuminate\Http\JsonResponse
-    {
-        // Fetch the booking with the given id
-        $booking = Booked::findOrFail($id);
+        // (Optional) Set up the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'landscape');
 
-        // Check if the status is 'pending'
-        if ($booking->status !== 'pending') {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Booking status is not pending.'], 400);
-        }
+        // Render the HTML as PDF
+        $dompdf->render();
 
-        // Update the status to 'in progress'
-        $booking->status = 'cancelled';
-
-        try {
-            $booking->save();
-            // Redirect back with a success message
-            return response()->json(['success' => 'Booking has cancelled'], 200);
-        } catch (\Exception $e) {
-            // Redirect back with an error message
-            return response()->json(['error' => 'Failed to update booking status.'], 500);
-        }
+        // Output the generated PDF to Browser
+        $dompdf->stream();
     }
 }

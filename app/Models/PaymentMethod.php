@@ -16,7 +16,7 @@ class PaymentMethod extends SoftDeleteModel
         'is_active',
     ];
 
-    public function displayName()
+    public function displayName(): string
     {
         return $this->payment_name . ' ' . $this->account_name . ' ' . $this->account_number;
     }

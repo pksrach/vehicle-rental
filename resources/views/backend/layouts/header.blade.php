@@ -11,6 +11,9 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+    {{--csrf using with ajax--}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Favicons -->
     <link href="{{asset('backend/assets/img/favicon.png')}}" rel="icon">
     <link href="{{asset('backend/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">

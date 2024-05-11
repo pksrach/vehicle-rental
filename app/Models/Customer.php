@@ -25,6 +25,6 @@ class Customer extends SoftDeleteModel
 
     public function displayName()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name . ' ' . $this->last_name . ' (' . $this->phone . ')';
     }
 }

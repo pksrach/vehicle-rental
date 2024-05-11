@@ -30,7 +30,7 @@
     </div>
 @endif
 
-
+{{--Modal show success--}}
 <div class="modal" id="successModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -48,6 +48,7 @@
     </div>
 </div>
 
+{{--Modal show error--}}
 <div class="modal" tabindex="-1" id="errorModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -60,6 +61,25 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--Modal show Confirm--}}
+<div class="modal" tabindex="-1" id="confirmModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Confirm</button>
             </div>
         </div>
     </div>

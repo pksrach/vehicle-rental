@@ -12,8 +12,15 @@ $isMainRouteBookedManagement = Request::is('admin/booking-management/*');
 $isBookingRoute = Request::is('admin/booking-management/bookings', 'admin/booking-management/bookings/*');
 $isPaymentMethodRoute = Request::is('admin/booking-management/payment-methods', 'admin/booking-management/payment-method/*');
 
+$isMainRouteUserManagement = Request::is('admin/user-management/*');
+$isCustomerRoute = Request::is('admin/user-management/customers', 'admin/user-management/customers/*');
+$isStaffRoute = Request::is('admin/user-management/staffs', 'admin/user-management/staffs/*');
+$isUserRoute = Request::is('admin/user-management/users', 'admin/user-management/users/*');
+
+$isMainRouteReportManagement = Request::is('admin/report-management/*');
+$isSaleServiceRoute = Request::is('admin/report-management/sales-services', 'admin/report-management/sales-services/*');
 ?>
-    <!-- ======= Sidebar ======= -->
+        <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -33,7 +40,7 @@ $isPaymentMethodRoute = Request::is('admin/booking-management/payment-methods', 
             <a class="nav-link {{ $isMainRouteVehicleManagement ? '' : 'collapsed' }}" data-bs-target="#tables-nav"
                data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Vehicle Management</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tables-nav" class="nav-content collapse {{ $isMainRouteVehicleManagement ? 'show' : '' }} "
                 data-bs-parent="#sidebar-nav">
@@ -66,7 +73,7 @@ $isPaymentMethodRoute = Request::is('admin/booking-management/payment-methods', 
             <a class="nav-link {{ $isMainRouteBookedManagement ? '' : 'collapsed' }}" data-bs-target="#tables-nav2"
                data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Booking Management</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tables-nav2" class="nav-content collapse {{ $isMainRouteBookedManagement ? 'show' : '' }} "
                 data-bs-parent="#sidebar-nav2">
@@ -88,56 +95,42 @@ $isPaymentMethodRoute = Request::is('admin/booking-management/payment-methods', 
 
         <!-- User -->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav3" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ $isMainRouteUserManagement ? '' : 'collapsed' }} " data-bs-target="#tables-nav3"
+               data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>User Management</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav3" class="nav-content collapse " data-bs-parent="#sidebar-nav3">
+            <ul id="tables-nav3" class="nav-content collapse {{ $isMainRouteUserManagement ? 'show' : '' }} "
+                data-bs-parent="#sidebar-nav3">
                 <li>
-                    <a href="#">
+                    <a class="{{$isCustomerRoute ? 'active' : ''}}" href="{{route('backend.customers.index')}}">
                         <i class="bi bi-circle"></i><span>Customer</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a class="{{$isStaffRoute ? 'active' : ''}}" href="{{route('backend.staffs.index')}}">
                         <i class="bi bi-circle"></i><span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{$isUserRoute ? 'active' : ''}}" href="{{route('backend.users.index')}}">
+                        <i class="bi bi-circle"></i><span>User</span>
                     </a>
                 </li>
             </ul>
         </li>
         <!-- End User Nav -->
 
-        <!-- Expense -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav4" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Expense Management</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="tables-nav4" class="nav-content collapse " data-bs-parent="#sidebar-nav4">
-                <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Expense</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Expense Type</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- End Expense Nav -->
-
         <!-- Report -->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav5" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed {{ $isMainRouteReportManagement ? '' : 'collapsed' }} " data-bs-target="#tables-nav5" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Report Management</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav5" class="nav-content collapse " data-bs-parent="#sidebar-nav5">
+            <ul id="tables-nav5" class="nav-content collapse {{ $isMainRouteReportManagement ? 'show' : '' }} " data-bs-parent="#sidebar-nav5">
                 <li>
-                    <a href="#">
-                        <i class="bi bi-circle"></i><span>Income</span>
+                    <a class="{{$isSaleServiceRoute ? 'active' : ''}}" href="{{route('backend.reports.sales-services')}}">
+                        <i class="bi bi-circle"></i><span>Sale Service</span>
                     </a>
                 </li>
             </ul>

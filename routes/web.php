@@ -3,9 +3,13 @@
 use App\Http\Controllers\Backend\BookingController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\PaymentMethodController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\StaffController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VehicleController;
 use App\Http\Controllers\frontend\AboutController;
 use App\Http\Controllers\frontend\AddToCardController;
@@ -21,6 +25,11 @@ use Illuminate\Support\Facades\Route;
 // Admin
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
+    Route::get('/get-booking-counts', [DashboardController::class, 'getBookingCounts'])->name('backend.dashboard.get-booking-counts');
+    Route::get('/get-customer-counts', [DashboardController::class, 'getCustomerCounts'])->name('backend.dashboard.get-customer-counts');
+    Route::get('/get-report-data', [DashboardController::class, 'getReportData'])->name('backend.dashboard.get-report-data');
+    Route::get('/get-top-rent', [DashboardController::class, 'topVehicleRent'])->name('backend.dashboard.get-top-rent');
+    Route::get('/top-rent/export/pdf', [DashboardController::class, 'topVehicleRentExportPdf'])->name('top-rent.export.pdf');
 
     // Vehicle Management
     Route::group(['prefix' => 'vehicle-management'], function () {
@@ -61,10 +70,35 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'bookings'], function () {
             Route::get('/', [BookingController::class, 'index'])->name('backend.bookings.index');
             Route::post('/create', [BookingController::class, 'create'])->name('backend.bookings.create');
-            Route::get('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
-            Route::get('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
-            Route::get('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
+            Route::put('/in-progress/{id}', [BookingController::class, 'inProgress'])->name('backend.bookings.in-progress');
+            Route::put('/complete/{id}', [BookingController::class, 'complete'])->name('backend.bookings.complete');
+            Route::put('/cancel/{id}', [BookingController::class, 'cancel'])->name('backend.bookings.cancel');
         });
+    });
+
+    // User Management
+    Route::group(['prefix' => 'user-management'], function () {
+        // Customer
+        Route::group(['prefix' => 'customers'], function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('backend.customers.index');
+        });
+
+        // Staff
+        Route::group(['prefix' => 'staffs'], function () {
+            Route::get('/', [StaffController::class, 'index'])->name('backend.staffs.index');
+        });
+
+        // User
+        Route::group(['prefix' => 'users'], function () {
+            Route::get('/', [UserController::class, 'index'])->name('backend.users.index');
+        });
+    });
+
+    // Report Management
+    Route::group(['prefix' => 'report-management'], function () {
+        Route::get('/sales-services', [ReportController::class, 'saleService'])->name('backend.reports.sales-services');
+        Route::get('/sales-services/export/excel', [ReportController::class, 'saleServiceExportExcel'])->name('sales-services.export.excel');
+        Route::get('/sales-services/export/pdf', [ReportController::class, 'saleServiceExportPdf'])->name('sales-services.export.pdf');
     });
 });
 

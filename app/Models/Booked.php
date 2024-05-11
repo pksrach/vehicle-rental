@@ -17,6 +17,7 @@ class Booked extends Model
         'customer_id',
         'staff_id',
         'payment_method_id',
+        'created_at',
     ];
 
     public function booked_details()
