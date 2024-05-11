@@ -20,6 +20,7 @@ use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PricingController;
 use App\Http\Controllers\frontend\ServiceController;
+use App\Http\Controllers\frontend\auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 // Admin Routes
@@ -126,9 +127,8 @@ Route::middleware(['auth'])->group(function () {
 // Need to use middleware auth to protect the routes
 Route::group(['prefix' => ''], function () {
     //Auth
-    Route::get('/login', [AuthController::class, 'login'])->name('front.login');
-    Route::get('/logout', [AuthController::class, 'doLogout'])->name('front.logout');
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/login', [LoginController::class, 'login'])->name('front.login');
+   
     // Home
     Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
     // About
