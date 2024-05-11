@@ -123,6 +123,10 @@ Route::middleware(['auth'])->group(function () {
 // Manage Frontend Routes
 // Need to use middleware auth to protect the routes
 Route::group(['prefix' => ''], function () {
+    //Auth
+    Route::get('/login', [AuthController::class, 'login'])->name('front.login');
+    Route::get('/logout', [AuthController::class, 'doLogout'])->name('front.logout');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
     // Home
     Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
     // About
