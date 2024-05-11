@@ -8,7 +8,7 @@
                     Create
                 </button>
                 @include('backend.vehicle.modal') --}}
-                    <div class="card">
+                <div class="card">
                     <div class="table-responsive">
                         <!-- Table with stripped rows -->
                         <table id="dataTableList" class="table table-striped">
@@ -47,6 +47,6 @@
                 </div>
             </div>
 
-        </div>  
+        </div>
     </section>
 @endsection
