@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Staff extends SoftDeleteModel
 {
@@ -30,8 +29,23 @@ class Staff extends SoftDeleteModel
         return $this->belongsTo('App\Models\User');
     }
 
-    public function displayName()
+    public function displayName(): string
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function profileName(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getRole(): string
+    {
+        return ucfirst($this->role);
+    }
+
+    public function profileImage()
+    {
+        return $this->attachment ? '/uploads/thumbnail/' . $this->attachment : 'no_person.png';
     }
 }

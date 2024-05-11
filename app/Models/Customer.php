@@ -27,4 +27,14 @@ class Customer extends SoftDeleteModel
     {
         return $this->first_name . ' ' . $this->last_name . ' (' . $this->phone . ')';
     }
+
+    public function profileName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function profileImage()
+    {
+        return $this->attachment ? '/uploads/thumbnail/' . $this->attachment : 'no_person.png';
+    }
 }
