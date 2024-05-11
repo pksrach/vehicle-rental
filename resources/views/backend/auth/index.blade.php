@@ -1,4 +1,5 @@
 @include('backend.layouts.header')
+{{--@section('title', 'Login Admin')--}}
 
 <main>
     <div class="container">
@@ -10,7 +11,7 @@
 
                         <div class="d-flex justify-content-center py-4">
 
-                            <a href="{{route('login')}}" class=" d-flex align-items-center w-auto">
+                            <a href="{{route('backend.login')}}" class=" d-flex align-items-center w-auto">
                                 <img src="{{asset('logo.png')}}" width="150" alt="logo">
                             </a>
                         </div><!-- End Logo -->
@@ -18,13 +19,14 @@
                         <div class="card mb-3">
 
                             <div class="card-body">
-
                                 <div class="pt-4 pb-2">
+                                    @include('components.alert')
                                     <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                     <p class="text-center small">Enter your username & password to login</p>
                                 </div>
 
-                                <form action="login" method="post" class="row g-3 needs-validation" novalidate>
+                                <form action="{{route('backend.login.post')}}" method="post"
+                                      class="row g-3 needs-validation" novalidate>
                                     @csrf
                                     <div class="col-12">
                                         <label for="yourUsername" class="form-label">Username</label>
@@ -42,23 +44,9 @@
                                                value="{{ old('password') }}" required>
                                         <div class="invalid-feedback">Please enter your password!</div>
                                     </div>
-
                                     <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remember" value="true"
-                                                   id="rememberMe">
-                                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                                        </div>
+                                        <button class="btn btn-primary w-100" type="submit">Login</button>
                                     </div>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item d-flex align-items-center">
-                                                <i class="bi bi-box-arrow-right"></i>
-                                                <span>Sign Out</span>
-                                            </button>
-                                        </form>
-                                    </li>
                                 </form>
 
                             </div>

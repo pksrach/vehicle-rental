@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\AuthenticateBackendController;
 use App\Http\Controllers\Backend\BookingController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
@@ -22,24 +23,25 @@ use App\Http\Controllers\frontend\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 // Admin Routes
-Route::middleware(['auth'])->group(function () {
 
+// Route Auth
+Route::group(['prefix' => 'admin/auth'], function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('backend.login');
+    Route::post('/login', [AuthController::class, 'doLogin'])->name('backend.login.post');
+    Route::get('/logout', [AuthController::class, 'doLogout'])->name('backend.logout');
+});
+
+// Index route need to check in not login state to redirect to login page else redirect to dashboard
+Route::get('/admin', function () {
+    if (auth()->check()) {
+        return redirect()->route('backend.dashboard');
+    }
+    return redirect()->route('backend.login');
+});
+
+Route::middleware([AuthenticateBackendController::class])->group(function () {
     Route::group(['prefix' => 'admin'], function () {
-        // Index route need to check in not login state to redirect to login page else redirect to dashboard
-        Route::get('/admin', function () {
-            if (auth()->check()) {
-                return redirect()->route('backend.dashboard');
-            }
-            return redirect()->route('login');
-        });
-
-        // Route Auth
-        Route::group(['prefix' => 'auth'], function () {
-            Route::get('/login', [AuthController::class, 'login'])->name('login');
-            Route::post('/login', [AuthController::class, 'doLogin'])->name('login.post');
-            Route::get('/logout', [AuthController::class, 'doLogout'])->name('logout');
-        });
-
+        // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
         Route::get('/get-booking-counts', [DashboardController::class, 'getBookingCounts'])->name('backend.dashboard.get-booking-counts');
         Route::get('/get-customer-counts', [DashboardController::class, 'getCustomerCounts'])->name('backend.dashboard.get-customer-counts');

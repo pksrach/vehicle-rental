@@ -27,7 +27,7 @@ class AuthController extends Controller
                     auth()->logout();
                     return redirect()->back()->with('error', 'This account is not authorized to access the admin panel.');
                 }
-                return Redirect::to('admin');
+                return redirect()->route('backend.dashboard');
             }
             return redirect()->back()->withInput($req->only('username'))->with('error', 'Invalid username or password. Please try again.');
         } catch (QueryException $e) {
@@ -40,6 +40,6 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('login'); // Redirect to the login page after logout
+        return Redirect::route('backend.login');
     }
 }

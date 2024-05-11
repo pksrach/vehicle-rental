@@ -173,7 +173,7 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{Auth::user()->staff->profileImage()}}"
+                    <img src="{{asset(Auth::user()->staff->profileImage())}}"
                          alt="Profile" class="rounded-circle">
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->staff->profileName() }}</span>
                 </a><!-- End Profile Iamge Icon -->
@@ -198,13 +198,16 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="{{route('logout')}}">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Sign Out</span>
-                        </a>
-                    </li>
-
+                    <form action="{{route('backend.logout')}}">
+                        @csrf
+                        <li>
+                            <div class="dropdown-item d-flex align-items-center"
+                                 onclick="event.preventDefault(); this.closest('form').submit();">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Logout</span>
+                            </div>
+                        </li>
+                    </form>
                 </ul>
                 <!-- End Profile Dropdown Items -->
 
