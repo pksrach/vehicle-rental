@@ -50,9 +50,15 @@
                                             <label class="form-check-label" for="rememberMe">Remember me</label>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100" type="submit">Login</button>
-                                    </div>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item d-flex align-items-center">
+                                                <i class="bi bi-box-arrow-right"></i>
+                                                <span>Sign Out</span>
+                                            </button>
+                                        </form>
+                                    </li>
                                 </form>
 
                             </div>

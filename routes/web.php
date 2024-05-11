@@ -23,9 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 // Admin Routes
 Route::middleware(['auth'])->group(function () {
+
     Route::group(['prefix' => 'admin'], function () {
         // Index route need to check in not login state to redirect to login page else redirect to dashboard
-        Route::get('/', function () {
+        Route::get('/admin', function () {
             if (auth()->check()) {
                 return redirect()->route('backend.dashboard');
             }
