@@ -21,24 +21,24 @@ use App\Http\Controllers\frontend\PricingController;
 use App\Http\Controllers\frontend\ServiceController;
 use Illuminate\Support\Facades\Route;
 
-// Need to use middleware auth to protect the routes
-// Admin
-// Route Auth
-Route::group(['prefix' => 'auth'], function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/login', [AuthController::class, 'doLogin'])->name('login.post');
-    Route::get('/logout', [AuthController::class, 'doLogout'])->name('logout');
-});
-
-//Route::get('/', function () {
-//    if (auth()->check()) {
-//        return redirect()->route('dashboard');
-//    }
-//    return redirect()->route('login');
-//});
-
+// Admin Routes
 Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'admin'], function () {
+        // Index route need to check in not login state to redirect to login page else redirect to dashboard
+        Route::get('/', function () {
+            if (auth()->check()) {
+                return redirect()->route('backend.dashboard');
+            }
+            return redirect()->route('login');
+        });
+
+        // Route Auth
+        Route::group(['prefix' => 'auth'], function () {
+            Route::get('/login', [AuthController::class, 'login'])->name('login');
+            Route::post('/login', [AuthController::class, 'doLogin'])->name('login.post');
+            Route::get('/logout', [AuthController::class, 'doLogout'])->name('logout');
+        });
+
         Route::get('/', [DashboardController::class, 'index'])->name('backend.dashboard');
         Route::get('/get-booking-counts', [DashboardController::class, 'getBookingCounts'])->name('backend.dashboard.get-booking-counts');
         Route::get('/get-customer-counts', [DashboardController::class, 'getCustomerCounts'])->name('backend.dashboard.get-customer-counts');
@@ -116,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/sales-services/export/pdf', [ReportController::class, 'saleServiceExportPdf'])->name('sales-services.export.pdf');
         });
     });
+
+
 });
 
 

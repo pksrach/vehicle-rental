@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -32,5 +34,12 @@ class AuthController extends Controller
             // Handle the error
             return view('backend.auth.database_error');
         }
+    }
+
+    public function doLogout(): RedirectResponse
+    {
+        Auth::logout();
+
+        return redirect()->route('login'); // Redirect to the login page after logout
     }
 }
