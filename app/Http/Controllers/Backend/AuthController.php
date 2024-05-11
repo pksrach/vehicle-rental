@@ -12,12 +12,12 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function login(): View
+    public function backendLogin(): View
     {
         return view('backend.auth.index');
     }
 
-    public function doLogin(Request $req)
+    public function backendDoLogin(Request $req)
     {
         try {
             $credentials = $req->only('username', 'password');
@@ -36,7 +36,7 @@ class AuthController extends Controller
         }
     }
 
-    public function doLogout(): RedirectResponse
+    public function backendDoLogout(): RedirectResponse
     {
         Auth::logout();
 
