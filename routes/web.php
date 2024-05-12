@@ -21,6 +21,7 @@ use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PricingController;
 use App\Http\Controllers\frontend\ServiceController;
 use App\Http\Controllers\frontend\auth\LoginController;
+use App\Http\Controllers\frontend\auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 // Admin Routes
@@ -129,7 +130,7 @@ Route::middleware(['auth'])->group(function () {
 Route::group(['prefix' => ''], function () {
     //Auth
     Route::get('/login', [LoginController::class, 'login'])->name('front.login');
-   
+    Route::get('/register', [RegisterController::class, 'register'])->name('front.register');
     // Home
     Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
     // About

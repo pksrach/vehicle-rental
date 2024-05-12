@@ -10,8 +10,8 @@
 
                         <div class="d-flex justify-content-center py-4">
 
-                            <a href="{{route('login')}}" class=" d-flex align-items-center w-auto">
-                                <img src="{{asset('logo.png')}}" width="150" alt="logo">
+                            <a href="{{ route('login') }}" class=" d-flex align-items-center w-auto">
+                                <img src="{{ asset('logo.png') }}" width="150" alt="logo">
                             </a>
                         </div><!-- End Logo -->
 
@@ -31,7 +31,7 @@
                                         <div class="input-group has-validation">
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                             <input type="text" name="username" class="form-control" id="yourUsername"
-                                                   value="{{ old('username') }}" required>
+                                                value="{{ old('username') }}" required>
                                             <div class="invalid-feedback">Please enter your username.</div>
                                         </div>
                                     </div>
@@ -39,15 +39,20 @@
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Password</label>
                                         <input type="password" name="password" class="form-control" id="yourPassword"
-                                               value="{{ old('password') }}" required>
+                                            value="{{ old('password') }}" required>
                                         <div class="invalid-feedback">Please enter your password!</div>
                                     </div>
 
+
                                     <div class="col-12">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remember" value="true"
-                                                   id="rememberMe">
+                                            <input class="form-check-input" type="checkbox" name="remember"
+                                                value="true" id="rememberMe">
                                             <label class="form-check-label" for="rememberMe">Remember me</label>
+                                        </div>
+                                        <div class="col-12">
+                                            <a href="{{ route('front.register') }}" class="text-center small">Don't have an
+                                                account? Register</a>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -75,4 +80,4 @@
     </div>
 </main><!-- End #main -->
 
-{{--@include('backend.layouts.footer')--}}
+{{-- @include('backend.layouts.footer') --}}
