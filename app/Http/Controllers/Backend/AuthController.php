@@ -12,12 +12,12 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function login(): View
+    public function backendLogin(): View
     {
         return view('backend.auth.index');
     }
 
-    public function doLogin(Request $req)
+    public function backendDoLogin(Request $req)
     {
         try {
             $credentials = $req->only('username', 'password');
@@ -27,7 +27,7 @@ class AuthController extends Controller
                     auth()->logout();
                     return redirect()->back()->with('error', 'This account is not authorized to access the admin panel.');
                 }
-                return Redirect::to('admin');
+                return redirect()->route('backend.dashboard');
             }
             return redirect()->back()->withInput($req->only('username'))->with('error', 'Invalid username or password. Please try again.');
         } catch (QueryException $e) {
@@ -36,10 +36,10 @@ class AuthController extends Controller
         }
     }
 
-    public function doLogout(): RedirectResponse
+    public function backendDoLogout(): RedirectResponse
     {
         Auth::logout();
 
-        return redirect()->route('login'); // Redirect to the login page after logout
+        return Redirect::route('backend.login');
     }
 }
