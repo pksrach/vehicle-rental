@@ -10,7 +10,7 @@
 
                         <div class="d-flex justify-content-center py-4">
 
-                            <a href="{{ route('login') }}" class=" d-flex align-items-center w-auto">
+                            <a href="{{ route('front.login') }}" class=" d-flex align-items-center w-auto">
                                 <img src="{{ asset('logo.png') }}" width="150" alt="logo">
                             </a>
                         </div><!-- End Logo -->

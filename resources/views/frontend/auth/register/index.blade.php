@@ -10,7 +10,7 @@
 
                         <div class="d-flex justify-content-center py-4">
 
-                            <a href="{{ route('login') }}" class=" d-flex align-items-center w-auto">
+                            <a href="{{ route('front.register') }}" class=" d-flex align-items-center w-auto">
                                 <img src="{{ asset('logo.png') }}" width="150" alt="logo">
                             </a>
                         </div><!-- End Logo -->
@@ -24,43 +24,37 @@
                                     <p class="text-center small">Enter your username & password to Register</p>
                                 </div>
 
-                                <form action="login" method="post" class="row g-3 needs-validation" novalidate>
+                                <form method="post" class="row g-3 needs-validation" action="{{ route('front.register.post') }}" id="myForm">
                                     @csrf
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label">Username</label>
-                                        <div class="input-group has-validation">
-
-                                            <input type="text" name="username" class="form-control" id="yourUsername"
-                                                value="{{ old('username') }}" required>
-                                            <div class="invalid-feedback">Please enter your username.</div>
-                                        </div>
+                                      <label for="username" class="form-label">Username</label>
+                                      <div class="input-group has-validation">
+                                        <input type="text" name="username" class="form-control" id="username" required>
+                                        <div class="invalid-feedback">Please enter your username.</div>
+                                      </div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label">Email</label>
-                                        <div class="input-group has-validation">
-                                            {{-- <span class="input-group-text" id="inputGroupPrepend">@</span> --}}
-                                            <input type="text" name="username" class="form-control" id="yourUsername"
-                                                value="{{ old('username') }}" required>
-                                            <div class="invalid-feedback">Please enter your username.</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword"
-                                            value="{{ old('password') }}" required>
-                                        <div class="invalid-feedback">Please enter your password!</div>
+                                      <label for="email" class="form-label">Email</label>
+                                      <div class="input-group has-validation">
+                                        <input type="text" name="email" class="form-control" id="email" required>
+                                        <div class="invalid-feedback">Please enter your email.</div>
+                                      </div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="yourPassword" class="form-label">Confirm Password</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword"
-                                            value="{{ old('password') }}" required>
-                                        <div class="invalid-feedback">Please enter your password!</div>
+                                      <label for="password" class="form-label">Password</label>
+                                      <input type="password" name="password" class="form-control" id="password" required>
+                                      <div class="invalid-feedback">Please enter your password!</div>
                                     </div>
                                     <div class="col-12">
-                                        <button class="btn btn-primary w-100" type="submit">Register</button>
+                                      <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                      <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required>
+                                      <div class="invalid-feedback">Please confirm your password!</div>
                                     </div>
-                                </form>
+                                    <div class="col-12">
+                                      <button class="btn btn-primary w-100" type="submit">Register</button>
+                                    </div>
+                                  </form>
+                                  
 
                             </div>
                         </div>
@@ -80,6 +74,22 @@
         </section>
 
     </div>
-</main><!-- End #main -->
+</main>
+<script>
+    const form = document.getElementById("myForm");
 
-{{-- @include('backend.layouts.footer') --}}
+    // Using event listener (recommended)
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const nameValue = formData.get("username");
+        const emailValue = formData.get("email");
+        const passwordValue = formData.get("password");
+        const confirmPasswordValue = formData.get("password_confirmation");
+        console.log("Name:", nameValue);
+        console.log("Email:", emailValue);
+        console.log("Password:", passwordValue);
+        console.log("Confirm Password:", confirmPasswordValue);
+    });
+</script>
