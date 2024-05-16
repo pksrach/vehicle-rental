@@ -1,5 +1,4 @@
-@include('backend.layouts.header')
-
+@include('frontend.auth.layout.header')
 <main>
     <div class="container">
 
@@ -24,7 +23,7 @@
                                     <p class="text-center small">Enter your username & password to Register</p>
                                 </div>
 
-                                <form method="post" class="row g-3 needs-validation" action="{{ route('front.register.post') }}" id="myForm">
+                                <form method="post" class="row g-3 needs-validation" action="{{ route('front.register.post') }}" id="myFormRegister">
                                     @csrf
                                     <div class="col-12">
                                       <label for="username" class="form-label">Username</label>
@@ -54,8 +53,6 @@
                                       <button class="btn btn-primary w-100" type="submit">Register</button>
                                     </div>
                                   </form>
-                                  
-
                             </div>
                         </div>
 
@@ -75,13 +72,13 @@
 
     </div>
 </main>
+
 <script>
     const form = document.getElementById("myForm");
 
     // Using event listener (recommended)
     form.addEventListener("submit", function(event) {
         event.preventDefault();
-
         const formData = new FormData(form);
         const nameValue = formData.get("username");
         const emailValue = formData.get("email");
@@ -91,5 +88,7 @@
         console.log("Email:", emailValue);
         console.log("Password:", passwordValue);
         console.log("Confirm Password:", confirmPasswordValue);
+        // window.location.reload();
+
     });
 </script>

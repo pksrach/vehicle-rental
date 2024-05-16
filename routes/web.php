@@ -33,12 +33,6 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 // Index route need to check in not login state to redirect to login page else redirect to dashboard
-//Route::get('/admin', function () {
-//    if (auth()->check()) {
-//        return redirect()->route('backend.dashboard');
-//    }
-//    return redirect()->route('backend.login');
-//});
 Route::group(['prefix' => 'admin', 'middleware' => 'guest'], function () {
     Route::get('/login', [AuthController::class, 'backendLogin'])->name('backend.login');
     Route::post('/login', [AuthController::class, 'backendDoLogin'])->name('backend.login.post');
@@ -130,7 +124,7 @@ Route::middleware([AuthenticateBackendController::class, 'auth'])->group(functio
 
 // Manage Frontend Routes
 // Need to use middleware auth to protect the routes
-Route::group(['prefix' => ''], function () {
+Route::group(['prefix' => '/'], function () {
     //Auth
     Route::get('/login', [LoginController::class, 'login'])->name('front.login');
     // Register

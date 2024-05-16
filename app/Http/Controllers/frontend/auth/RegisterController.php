@@ -18,6 +18,8 @@ class RegisterController extends Controller
     }
     public function doRegister(Request $request)
     {
+        Log('Hello');
+        dd($request);
         try {
             $this->validate($request, [
                 'username' => 'required',
