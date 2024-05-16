@@ -18,24 +18,22 @@ class RegisterController extends Controller
     }
     public function doRegister(Request $request)
     {
-        Log('Hello');
-        dd($request);
+
         try {
             $this->validate($request, [
-                'username' => 'required',
-                'email' => 'required|email|unique:users,email',
+                'username' => 'required|unique:users,username',
+                'email' => 'required',
                 'password' => 'required|min:6',
-                'password_confirmation' => 'required|confirmed', // Use confirmed rule for password confirmation
+                'password_confirmation' => 'required', // Use confirmed rule for password confirmation
             ]);
-
+            if ($request->password != $request->password_confirmation) {
+                return back()->withErrors(['password' => 'Password and confirm password does not match']);
+            }
             $user = new User();
             $user->username = $request->username;
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->save();
-
-            // Optional: Login user after registration
-            // Auth::login($user);
 
             return redirect()->route('frontend.home');
         } catch (ValidationException $e) {
