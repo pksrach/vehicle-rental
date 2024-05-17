@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function backendDoLogin(Request $req)
     {
-        try {
+            ry {
             $credentials = $req->only('username', 'password');
             if (auth()->attempt($credentials)) {
                 $user = auth()->user();

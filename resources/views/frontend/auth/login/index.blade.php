@@ -24,10 +24,11 @@
                                     <p class="text-center small">Enter your username & password to login</p>
                                 </div>
 
-                                <form action="login" method="post" class="row g-3 needs-validation" novalidate>
+                                <form action="{{ route('front.login.post') }}" method="post"
+                                    class="row g-3 needs-validation" novalidate>
                                     @csrf
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label">Username</label>
+                                        <label for="yourUsername" class="form-label" >Username</label>
                                         <div class="input-group has-validation">
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                             <input type="text" name="username" class="form-control" id="yourUsername"
@@ -51,7 +52,8 @@
                                             <label class="form-check-label" for="rememberMe">Remember me</label>
                                         </div>
                                         <div class="col-12">
-                                            <a href="{{ route('front.register') }}" class="text-center small">Don't have an
+                                            <a href="{{ route('front.register') }}" class="text-center small">Don't have
+                                                an
                                                 account? Register</a>
                                         </div>
                                     </div>

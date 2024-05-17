@@ -127,6 +127,7 @@ Route::middleware([AuthenticateBackendController::class, 'auth'])->group(functio
 Route::group(['prefix' => '/'], function () {
     //Auth
     Route::get('/login', [LoginController::class, 'login'])->name('front.login');
+    Route::post('/login', [LoginController::class, 'doLogin'])->name('front.login.post');
     // Register
     Route::get('/register', [RegisterController::class, 'register'])->name('front.register');
     Route::post('/register', [RegisterController::class, 'doRegister'])->name('front.register.post');
