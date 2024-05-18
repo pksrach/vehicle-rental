@@ -127,8 +127,11 @@
                                         </div>
                                         <form id="myForm">
                                             <p class="d-flex mb-0 d-block">
-                                                <a type="submit" href="{{ route('frontend.booking') }}"
-                                                    class="btn btn-primary py-2 mr-1" id="btnBooking">Book now</a>
+                                                <a href="{{ route('frontend.booking') }}"
+                                                    class="btn btn-primary py-2 mr-1 btn-booking"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->name }}" data-price="{{ $item->price }}"
+                                                    data-description="{{ $item->description }}">Book now</a>
                                                 <a href="#" class="btn btn-secondary py-2 ml-1">Details</a>
                                             </p>
                                         </form>
@@ -136,26 +139,10 @@
                                 </div>
                             </div>
                         @endforeach
-                        {{-- <div class="item">
-                            <div class="car-wrap rounded ftco-animate">
-                                <div class="img rounded d-flex align-items-end"
-                                    style="background-image: url(frontend/assets/images/car-1.jpg);">
-                                </div>
-                                <div class="text">
-                                    <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                    <div class="d-flex mb-3">
-                                        <span class="cat">Cheverolet</span>
-                                        <p class="price ml-auto">$500 <span>/day</span></p>
-                                    </div>
-                                    <p class="d-flex mb-0 d-block"><a href="#"
-                                            class="btn btn-primary py-2 mr-1">Book now</a> <a href="#"
-                                            class="btn btn-secondary py-2 ml-1">Details</a></p>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -379,7 +366,7 @@
                 </div>
                 <div class="col-md-4 d-flex ftco-animate">
                     <div class="blog-entry">
-                        <a href="blog-single.html" class="block-20"
+                        <a href="blog-single.html" class="block-20"q
                             style="background-image: url('frontend/assets/images/image_3.jpg');">
                         </a>
                         <div class="text pt-4">
@@ -444,7 +431,7 @@
         $(document).ready(function() {
             $("#btnBooking").click(function(e) {
                 var formData = $(this).closest("form")
-            .serialize(); // Get data from form containing the button
+                    .serialize(); // Get data from form containing the button
                 localStorage.setItem("formData", JSON.stringify(formData));
 
                 // Additional Logic (optional):
@@ -468,4 +455,5 @@
             });
         });
     </script>
+ 
 @endsection

@@ -147,4 +147,6 @@ Route::group(['prefix' => '/'], function () {
     Route::get('/blog', [BlogController::class, 'index'])->name('frontend.blog');
     // Booking
     Route::get('/booking', [AddToCardController::class, 'index'])->name('frontend.booking');
+    Route::post('/booking', [AddToCardController::class, 'postBooking'])->name('frontend.booking.post');
+     
 });
