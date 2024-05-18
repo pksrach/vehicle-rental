@@ -33,6 +33,7 @@ class RegisterController extends Controller
             $user->username = $request->username;
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
+            $user->user_type = 1;
             $user->save();
 
             return redirect()->route('frontend.home');

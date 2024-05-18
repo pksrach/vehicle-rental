@@ -28,7 +28,7 @@
                                     class="row g-3 needs-validation" novalidate>
                                     @csrf
                                     <div class="col-12">
-                                        <label for="yourUsername" class="form-label" >Username</label>
+                                        <label for="yourUsername" class="form-label">Username</label>
                                         <div class="input-group has-validation">
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                             <input type="text" name="username" class="form-control" id="yourUsername"
@@ -53,7 +53,6 @@
                                         </div>
                                         <div class="col-12">
                                             <a href="{{ route('front.register') }}" class="text-center small">Don't have
-                                                an
                                                 account? Register</a>
                                         </div>
                                     </div>
@@ -64,7 +63,7 @@
 
                             </div>
                         </div>
-
+                        @include('components.alert')
                         <div class="credits">
                             <!-- All the links in the footer should remain intact. -->
                             <!-- You can delete the links only if you purchased the pro version. -->
